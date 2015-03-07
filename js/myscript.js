@@ -14,9 +14,7 @@
  */
 
 /*Start the game once the page has been loaded*/
- $(function ()  {     
-    initGame();
-});
+window.onload = initGame;
 
 /*Initialize the game*/
 function initGame() {
@@ -82,6 +80,14 @@ function setupCanvas() {
     
     backgroundImg.gameRef.players.push("character");
     backgroundImg.gameRef.players.push("wolf");
+    
+    backgroundImg.gameRef.actionList.push("charRoll");
+    backgroundImg.gameRef.actionList.push("charMove");
+    backgroundImg.gameRef.actionList.push("wolfRoll");
+    backgroundImg.gameRef.actionList.push("wolfMove");
+    backgroundImg.gameRef.actionList.push("rollDie");
+    backgroundImg.gameRef.actionList.push("cardOpen");
+    backgroundImg.gameRef.actionList.push("cardResp");
     
     
     /*Draw the character on the screen*/
@@ -165,11 +171,11 @@ function setupCharacter(gameCanvas) {
     backgroundImg.strokeStyle = "red";
     backgroundImg.lineWidth = character.height;*/
         
-    // /*Set movement speed*/
+    /*Set movement speed*/
     // move = height + height/2;
     // lastKey = 37; //Setting the last key to be left - same direction as the current state
     
-    // /*Save enemy initial location*/
+    /*Save enemy initial location*/
     // pathC[pathCCount] = {
             // x: character.oldPosX + Math.floor(character.height/2), 
             // y: character.oldPosY + Math.floor(character.height/2),
@@ -179,7 +185,7 @@ function setupCharacter(gameCanvas) {
             // width: lineWidth
     // };
     
-    // pathCCount++
+    // pathCCount++;
     
 }
 
@@ -202,7 +208,6 @@ function setupCard(gameCanvas) {
     /*Save all frames*/
     card[0].frameNum = 4;
     card[0].frameCount = 1;
-    //card[0].frame["card4"].height = 1;
     
     //var w = [0, 150, 350, 150, 350];
     //var h = [0, 350, 150, 350, 150];
@@ -275,35 +280,6 @@ function addEnemy(gameCanvas) {
     
     pathECount++
     
-    /*Set line colour*/
-    //backgroundImg.strokeStyle = "black";
-    //backgroundImg.lineWidth = height/2;
-    
-    /*
-    enemy[0] = new physics(gameCanvas, width, height, 50, 100);
-    enemy[0].addImg(gameImage.loadedImg["plant"]);
-    enemy[0].dx = 1;
-    enemy[0].dy = -0.2;
-    
-    enemy[1] = new physics(gameCanvas, width, height, 50, -100);
-    enemy[1].addImg(gameImage.loadedImg["plant"]);
-    enemy[1].dx = 1;
-    enemy[1].dy = -0.2;
-    
-    enemy[2] = new physics(gameCanvas, width, height, 100, 30);
-    enemy[2].addImg(gameImage.loadedImg["plant"]);
-    enemy[2].dx = 1;
-    enemy[2].dy = -0.2;
-    
-    enemy[3] = new physics(gameCanvas, width, height, 550, 200);
-    enemy[3].addImg(gameImage.loadedImg["plant"]);
-    enemy[3].dx = 1;
-    enemy[3].dy = -0.2;
-    
-    enemy[4] = new physics(gameCanvas, width, height, 50, -300);
-    enemy[4].addImg(gameImage.loadedImg["plant"]);
-    enemy[4].dx = 1.5;
-    enemy[4].dy = -1;*/
 }
 
 function addAliens(gameCanvas) {

@@ -95,6 +95,8 @@ function imageLib(canvasName, width, height, xPos, yPos) {
     this.gameRef = {
       turn: "",   //Current player's turn
       preTurn: "",    //Previous player's turn
+      action: "",
+      actionList: [],
       numMove: 0,          //Number of moves available
       players: [], //List of players in the game
       winner: "",          //List of winners of the game
