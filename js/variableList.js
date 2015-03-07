@@ -18,7 +18,9 @@ var cBlock;     //Block canvas
 var ctxBlock;   //Block context
 
 var gameImage; //Object that'll store all the preloaded images
-var imgSrc = ["background", "introMenuBgd", "character", "enemy", "Fire", "Water", "Lightning"];   //Name of images
+var imgSrc = ["background",
+ "card1", "card2", "card3", "card4",
+ "introMenuBgd", "character", "enemy", "wolf"];   //Name of images
 var backgroundImg;  //background image object
 var character;  //character image object
 var candy;  //candy image object
@@ -63,3 +65,5 @@ var oldPos;
 var lastKey = 0;
 var tempBlkNum; //Might not need
 var tempBlkPos;
+
+var card = [];   //Display card

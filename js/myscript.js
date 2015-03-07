@@ -59,6 +59,8 @@ function setupCanvas() {
     var gameCanvas = "gameCanvas";
     var height = 50;
     var width = 50;
+    var square = 100;
+    
     backgroundImg = new imageLib(gameCanvas, width, height, 0, 0);
     
     /*Add background image to canvas*/
@@ -67,12 +69,20 @@ function setupCanvas() {
     /*Setup interface screens*/
     setupInterfaces();
     
-    /*Initate grid
+    /*Initiate grid*/
     //backgroundImg.canvasGrid(backgroundImg.canvas.width, backgroundImg.canvas.height);
-    backgroundImg.canvasGrid(25);   //Square size
-    backgroundImg.gridSqHeight = 25;
-    backgroundImg.gridSqWidth = 25;
-    */
+    backgroundImg.canvasGrid(square);   //Square size
+    backgroundImg.gridSqHeight = square;
+    backgroundImg.gridSqWidth = square;
+    setupGridSpots();
+    
+    /*Set up the game ref*/
+    backgroundImg.gameRef.turn = "character";
+    backgroundImg.gameRef.preTurn = "wolf";
+    
+    backgroundImg.gameRef.players.push("character");
+    backgroundImg.gameRef.players.push("wolf");
+    
     
     /*Draw the character on the screen*/
     setupCharacter(gameCanvas);
@@ -80,6 +90,9 @@ function setupCanvas() {
     
     /*Drawing out paths in the game*/
     //setupObstacles();
+    
+    /*Draw up the cards*/
+    setupCard(gameCanvas);
 }
 
 /*Set up the different interfaces of the game*/
@@ -89,9 +102,9 @@ function setupInterfaces() {
    //centerVer = backgroundImg.canvas.width/2;
 
    /*Set up the intro/menu interface*/
-   backgroundImg.introBackground(gameImage.loadedImg["introMenuBgd"], 0, 0, 600, 400); //Set up the background
-   backgroundImg.setTitle("Element Race", 100, 200, "bold 60px Arial" );//Set up the title
-   backgroundImg.setStartButton("Start", 50, 350, "bold 24px Arial" );  //Set up the start button
+   backgroundImg.introBackground(gameImage.loadedImg["introMenuBgd"], 0, 0, 800, 500); //Set up the background
+   backgroundImg.setTitle("Red vs Wolf", 220, 200, "bold 60px Arial" );//Set up the title
+   backgroundImg.setStartButton("Start", 50, 450, "bold 24px Arial" );  //Set up the start button
    
    /*Set up the Game Over Interface screen*/
    backgroundImg.setGameOverMsg("GAME OVER", 125, 160, "bold 60px Arial", "red");
@@ -118,43 +131,109 @@ function setupObstacles() {
 /*Set up the character*/
 function setupCharacter(gameCanvas) {
     /*Size of character*/
-    var height = 15;
-    var width = 15;
+    var height = 50;
+    var width = 50;
     var cord = [], x, y, gridPos;
     
     var colour = "red";
     var lineWidth = height;
     
+    var startGridPoint = 32;
+    
+    cord = backgroundImg.aryPixelPos(startGridPoint); //Get the pixel location of the starting position 32
+    
     /*Add the character to the canvas*/
-    character = new physics(gameCanvas, width, height, backgroundImg.canvas.width - width, 210);
-    character.oldPosX = backgroundImg.canvas.width - width;
-    character.oldPosY = 210;
-    character.addImg(gameImage.loadedImg["Fire"]);
+    //character = new physics(gameCanvas, width, height, backgroundImg.canvas.width - width, 210);
+    character = new physics(gameCanvas, width, height, cord[0], cord[1]);
+    character.oldPosX = cord[0];
+    character.oldPosY = cord[1];
+    
+    /*Save current location on the grid*/
+    character.curGridLoc = startGridPoint;
+    
+    //console.log("Character set up coords "  + cord[0] + " " + cord[1]);
+    
+    //character.oldPosX = backgroundImg.canvas.width - width;
+    //character.oldPosY = 210;
+    character.addImg(gameImage.loadedImg["character"]);
     
     /*Character Direction*/
-    character.dx = -1;
+    character.dx = 1;
     character.dy = 0;
     
     /*Set line colour
     backgroundImg.strokeStyle = "red";
     backgroundImg.lineWidth = character.height;*/
         
-    /*Set movement speed*/
-    move = height + height/2;
-    lastKey = 37; //Setting the last key to be left - same direction as the current state
+    // /*Set movement speed*/
+    // move = height + height/2;
+    // lastKey = 37; //Setting the last key to be left - same direction as the current state
     
-    /*Save enemy initial location*/
-    pathC[pathCCount] = {
-            x: character.oldPosX + Math.floor(character.height/2), 
-            y: character.oldPosY + Math.floor(character.height/2),
-            oX: character.oldPosX, 
-            oY: character.oldPosY,
-            rbg: colour,
-            width: lineWidth
-    };
+    // /*Save enemy initial location*/
+    // pathC[pathCCount] = {
+            // x: character.oldPosX + Math.floor(character.height/2), 
+            // y: character.oldPosY + Math.floor(character.height/2),
+            // oX: character.oldPosX, 
+            // oY: character.oldPosY,
+            // rbg: colour,
+            // width: lineWidth
+    // };
     
-    pathCCount++
+    // pathCCount++
     
+}
+
+/*Set up the cards for the board*/
+function setupCard(gameCanvas) {
+   /*Size of character*/
+    var height = 150;
+    var width = 150;
+    var cord = [], x, y, gridPos;
+    var i = 0; //Loop counter
+    
+    /*Add the card to the canvas*/
+    card[0] = new imageLib(gameCanvas, width, height, 150, 200);
+    card[0].oldPosX = 150;
+    card[0].oldPosY = 200;
+    
+    /*Save current location on the canvas*/
+    card[0].addImg(gameImage.loadedImg["card1"]);
+   
+    /*Save all frames*/
+    card[0].frameNum = 4;
+    card[0].frameCount = 1;
+    //card[0].frame["card4"].height = 1;
+    
+    //var w = [0, 150, 350, 150, 350];
+    //var h = [0, 350, 150, 350, 150];
+    var w = [0, 150, 150, 150, 150];
+    var h = [0, 150, 150, 150, 150];
+    
+    for (i = 1; i <= card[0].frameNum; i++) {
+       card[0].frame["card"+i] = {
+         image: gameImage.loadedImg["card"+i],
+         width: w[i],
+         height: h[i]
+       };
+    }
+      
+    //console.log(card[0].frame["card4"].height); 
+    // for (i = 1; i <= card[0].frameNum; i++) {
+      // card[0].frame["card"+i].image = gameImage.loadedImg["card"+i];
+      
+    // }
+    // console.log(card[0].frame["card4"].height); 
+    // card[0].frame["card"+1].width = 150;
+    // card[0].frame["card"+2].width = 350;
+    // card[0].frame["card"+3].width = 150;
+    // card[0].frame["card"+4].width = 350
+    
+    // card[0].frame["card"+1].height = 350;
+    // card[0].frame["card"+2].height = 150;
+    // card[0].frame["card"+3].height = 350;
+    // card[0].frame["card"+4].height = 150;
+    
+    //console.log(card[0].frame["card4"].height); 
 }
 
 /*Set up the enemy*/
@@ -163,14 +242,22 @@ function addEnemy(gameCanvas) {
     var height = 40;
     var width = 20;*/
     
-    var height = 15;
-    var width = 15;
+    var height = 50;
+    var width = 50;
     var colour = "black";
     var lineWidth = Math.floor(15 / 2);
     
+    var startGridPoint = 32;
+    
+    cord = backgroundImg.aryPixelPos(startGridPoint); //Get the pixel location of the starting position 32
+        
     /*Setting enemy location*/
-    enemy[0] = new physics(gameCanvas, width, height, 1, 210);
-    enemy[0].addImg(gameImage.loadedImg["enemy"]);
+    //enemy[0] = new physics(gameCanvas, width, height, 1, 210);
+    enemy[0] = new physics(gameCanvas, width, height, cord[0], cord[1]);
+    enemy[0].addImg(gameImage.loadedImg["wolf"]);
+    
+    /*Save current location on the grid*/
+    enemy[0].curGridLoc = startGridPoint;
     
     /*Enemy Direction*/
     enemy[0].dx = 1;
@@ -249,7 +336,43 @@ function addCandy(gameCanvas) {
     candy.addImg(gameImage.loadedImg["candy"]);
 }
 
+/*Set up the grid*/
+function setupGridSpots() {
+   /*Direction spots*/
+   right = [32, 24, 17];
+   up = [39, 30];
+   left = [7, 14];
+   down = [0, 9];
+   
+   /*End spot*/
+   end = [21];
+   
+   /*Card spots*/
+   card = [32];
+   
+   /*Fill grid*/
+   fillGrid("right", right);
+   fillGrid("up", up);
+   fillGrid("left", left);
+   fillGrid("down", down);
+   
+   fillGrid("end", end);
+   
+   fillGrid("card", card);
+}
 
+function fillGrid(msg, ary) {
+   var i, aryLen, val; 
+   var grid = backgroundImg.grid;   
+   
+   /*Determine the number of squares in the grid*/
+   aryLen = ary.length;
+   
+   for (i = 0; i < aryLen; i++) {
+      val = ary[i];
+      grid[val] = msg;
+   }
+}
 
 
 

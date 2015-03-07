@@ -36,6 +36,13 @@ function imageLib(canvasName, width, height, xPos, yPos) {
     this.slopeY = 0;
        
     this.image = "";
+    this.frame = {
+      image: "",
+      width: 0,
+      height: 0
+    };
+    this.frameNum = 1;
+    this.frameCount = 1;
     this.repeatHor = false;
     this.repeatVer = false;
     this.loopHor = false;
@@ -61,6 +68,14 @@ function imageLib(canvasName, width, height, xPos, yPos) {
     this.gridCol = 0;
     this.gridSqWidth = 0;
     this.gridSqHeight = 0;
+    this.curGridLoc = 0;
+    /*
+    this.grid = {
+      row: 0;
+      col: 0;
+      sqWidth: 0;
+      sqHeight: 0;
+    };*/
     
     /***Font***/
     this.fontDefault = "normal 12px Arial";
@@ -75,6 +90,18 @@ function imageLib(canvasName, width, height, xPos, yPos) {
     
     /*Game Over*/
     this.gameOverMessage = [];
+    
+    /***Mechanics***/
+    this.gameRef = {
+      turn: "",   //Current player's turn
+      preTurn: "",    //Previous player's turn
+      numMove: 0,          //Number of moves available
+      players: [], //List of players in the game
+      winner: "",          //List of winners of the game
+      loser: "",           //List of losers of the game
+    };
+    
+    this.animateTimer;
 };
 
 /*Add image to the canvas*/
@@ -268,16 +295,21 @@ imageLib.prototype.aryNumToXYCord = function(num) {
     
     /*Modify the column number if it's the last column in the row*/
     if (cord[0] == 0 && num != 0) {
-        cord[0] = this.gridCol;
-        cord[1] -= 1;
+      
+        //cord[0] = this.gridCol;
+        //cord[1] -= 1;
     }
-    
-    console.log(num + " " + cord[0] + " " + cord[1]);
+    //console.log("aryNumToXYCord - " + num + "  " + cord[0] + " " +cord[1]);
     
     return cord;
 };
 
 
+/* Convert 1D array position to pixel location on the canvas
+ * cord[0] = x coordinate
+ * cord[1] = y coordinate
+ */
+ /*NOT FULLY TESTED*/
 imageLib.prototype.aryPixelPos = function(num) {
     var cord = []; //position 0 = x cordinate, 1 = y coordinate
     //var x, y;
@@ -316,8 +348,291 @@ imageLib.prototype.addToGrid = function(pos, data){
     this.grid[pos] = data;
 };
 
+/*Draw the grid lines*/
+imageLib.prototype.drawGridLines = function() {
+   var startX = 0;
+   var startY = 0;
+   var endX = 0;
+   var endY = this.canvas.height;
+   var width = this.gridSqWidth;
+   var height = this.gridSqHeight;
+   var i; //loop counter
+   
+   /*Set up line*/
+   this.lineWidth = 2;
+   this.strokeStyle = "black" ; //Setting path colour
+   this.drawLine(startX, startY, endX, endY);
+   
+   /*Draw all vertical lines*/
+   for (i = 0; i < this.gridCol; i++) {
+      startX += width;
+      endX += width;
+      this.drawLine(startX, startY, endX, endY);
+   }
+   
+   /*Reset variables*/
+   startX = 0;
+   startY = 0;
+   endX = this.canvas.width;
+   endY = 0;
+   this.drawLine(startX, startY, endX, endY);
+   
+   /*Draw all horizontal lines*/
+   for (i = 0; i < this.gridRow; i++) {
+      startY += height;
+      endY += height;
+      this.drawLine(startX, startY, endX, endY);
+   }
+};
 
+/*Determine the next player's turn*/
+imageLib.prototype.nextPlayerTurn = function() {
+   var temp, tempPre;
+   var game = this.gameRef;
+   var i;   //Loop counter
+   
+   /*Save who the previous player was*/
+   game.preTurn = game.turn;
+   
+   /*Determine the next player's turn*/
+   for (i = 0; i < game.players.length; i++) {
+      if (i == game.players.length - 1) { //Determine if at the end of the list then loop to the front
+         game.turn = game.players[0];
+      }
+      // else if (i == 0 && game.players[i] == game.turn) {
+         // game.turn = game.players[game.players.length - 1];
+         // break;
+      // }
+      else if (game.players[i] == game.turn) {
+         game.turn = game.players[i + 1];
+         break;
+      }
+   }
+};
 
+/*Move the image from the specified starting and ending pixel coordinate*/
+imageLib.prototype.animateMove = function(endX, endY, speed) {
+   /*Figure out the direction*/
+   var diffX = endX - this.xPos;
+   var diffY = endY - this.yPos;
+   
+   var dx = 1;
+   var dy = 1;
+   
+   if (diffX < 0) {
+      dx = -1 * speed;
+   }
+   else if (diffX == 0) {
+      dx = 0;
+   }
+   
+   if (diffY < 0) {
+      dy = -1 * speed;
+   }
+   else if (diffY == 0) {
+      dx = 0;
+   }   
+   
+   
+   console.log("in imglib " + dx + " " + dy + " " + this.xPos + " " + this.yPos);
+   var tickCount = 0;
+   
+   while (tickCount < 100) {
+      if (dx == 0 && dy ==0) {
+         break;
+      }
+      // /*Clear the canvas*/
+      // backgroundImg.clearCanvas();
+    
+      // /*Draw the background*/
+      // backgroundImg.redraw(backgroundImg.xPos, backgroundImg.yPos);
+    
+      // /*Draw the grid*/
+      // backgroundImg.drawGridLines();
+      
+    
+      this.xPos += dx;
+      this.yPos += dy;
+      this.redraw(this.xPos, this.yPos);
+      tickCount += 1;
+      
+      console.log("tick " + this.xPos + " " + this.yPos);
+      
+   }
+   
+        // if (tickCount > ticksPerFrame) {
+        
+            // tickCount = 0;
+        	
+            // // If the current frame index is in range
+            // if (frameIndex < numberOfFrames - 1) {	
+                // // Go to the next frame
+                // frameIndex += 1;
+            // }	
+        // }
+        
+        // // wait one second before starting animation
+      // setTimeout(function() {
+        // var startTime = (new Date()).getTime();
+        // animate(myRectangle, canvas, context, startTime);
+      // }, 1000);
+   /*for (i = 0; i < Math.abs(diffX); i += (1 * speed)) {
+      this.redraw(this.xPos + dx, this.dy + dy);
+   } */  
+   
+};
+
+imageLib.prototype.animateImg = function() {
+   var c = this;
+   
+   c.image = c.frame["card"+c.frameCount].image;
+   c.width = c.frame["card"+c.frameCount].width;
+   c.height = c.frame["card"+c.frameCount].height;
+   
+   c.redraw(c.xPos, c.yPos);
+   
+   if (c.frameCount >= c.frameNum) {
+      c.frameCount = 1;
+   }
+   else {
+      c.frameCount += 1;
+   }
+};
+
+imageLib.prototype.animateCenter2 = function() {
+   //startClock = new Date().getTime();
+   var oneSec = 10;
+   this.animateTimer = setInterval(this.startAnimateCenter(), oneSec);  
+};
+
+//imageLib.prototype.startAnimateCenter = function() {
+imageLib.prototype.animateCenter = function() {
+   var c = this;
+   var oriW, oriH;
+   var qW, qH;
+   var newPosX, newPosY;
+   var oriPosX, oriPosY;
+   
+   /*Get the image*/
+   c.image = c.frame["card"+c.frameCount].image;
+   
+   /*Get original dimension*/
+   oriW = c.frame["card1"].width;
+   oriH = c.frame["card1"].height;
+   
+   /*Get image dimension*/
+   c.width = c.frame["card"+c.frameCount].width;
+   c.height = c.frame["card"+c.frameCount].height;
+   
+   /*Get the quarter height and width*/
+      qW = oriW/2;
+      qH = oriH/2;
+      
+      oriPosX = c.oldPosX;
+      oriPosY = c.oldPosY;
+      console.log("cheight = " + c.height + " " + oriH);
+      console.log("cwidth = " + c.width + " " + oriW);
+   /*Determine if the current image and its original are the same*/
+   if (c.Height != oriH || c.Width != oriW) {   //If new image hight and width are not the same as the original
+   console.log("NOT same");
+      this.canvasCtx.drawImage(this.image, this.xPos-150, this.yPos,  this.width, this.height);
+    
+    /*Update related image information
+    this.oldPosX = this.xPos;
+    this.oldPosY = this.yPos;
+    this.xPos = newPosX;
+    this.yPos = newPosY;   */
+    
+      
+      //c.redraw(oriPosX - qW, oriPosY + qH);
+   }
+   else { 
+   console.log("Same");
+      this.canvasCtx.drawImage(this.image, this.xPos+350, this.yPos - qH,  this.width, this.height);
+      //c.redraw(oriPosX + qW, oriPosY - qH);
+   }
+   
+   
+   /*Draw the image*/
+   //c.redraw(c.xPos, c.yPos);
+   
+      //c.oldPosX = oriPosX;
+      //c.oldPosX = oriPosY;
+   
+   /*Increase frame count*/
+   if (c.frameCount >= c.frameNum) {
+      c.frameCount = 1;
+   }
+   else {
+      c.frameCount += 1;
+   }
+};
+
+imageLib.prototype.redrawRotate = function() {
+var c = this;
+   var oriW, oriH;
+   var qW, qH;
+   var newPosX, newPosY;
+   var oriPosX, oriPosY;
+   
+   /*Get the image*/
+   c.image = c.frame["card"+c.frameCount].image;
+   
+   /*Get original dimension*/
+   oriW = c.frame["card1"].width;
+   oriH = c.frame["card1"].height;
+   
+   /*Get image dimension*/
+   c.width = c.frame["card"+c.frameCount].width;
+   c.height = c.frame["card"+c.frameCount].height;
+   
+   /*Get the quarter height and width*/
+   qW = oriW/2;
+   qH = oriH/2;
+      
+      oriPosX = c.oldPosX;
+      oriPosY = c.oldPosY;
+      
+   /*Determine if the current image and its original are the same*/
+   if (c.Height != oriH && c.Width != oriW) {   //If new image hight and width are not the same as the original
+   console.log("NOT same");
+      this.canvasCtx.drawImage(this.image, this.xPos-150, this.yPos,  this.width, this.height);
+      }
+   else {
+   console.log("Same");
+      this.canvasCtx.drawImage(this.image, this.xPos+350, this.yPos - qH,  this.width, this.height);
+   }
+   
+};
+
+imageLib.prototype.clearAnimateTimer = function() {
+   clearInterval(this.animateTimer);   
+};
+
+// function Timer(callback, delay) {
+    // var timerId, start, remaining = delay;
+
+    // this.pause = function() {
+        // window.clearTimeout(timerId);
+        // remaining -= new Date() - start;
+    // };
+
+    // this.resume = function() {
+        // start = new Date();
+        // window.clearTimeout(timerId);
+        // timerId = window.setTimeout(callback, remaining);
+    // };
+
+    // this.resume();
+// }
+
+// var timer = new Timer(function() {
+    // alert("Done!");
+// }, 1000);
+
+// timer.pause();
+// // Do some stuff...
+// timer.resume();
 
 
 

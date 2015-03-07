@@ -78,6 +78,11 @@ function keyDownEvent(e) {
             fKeyEvent();
             
             break;
+        case 82:    
+            // S Key pressed
+            rKeyEvent();
+            
+            break;
             
         case 83:
             // S Key pressed
@@ -245,6 +250,15 @@ function fKeyEvent() {
    /*Update the character's Path*/
    backgroundImg.strokeStyle = "red";
    backgroundImg.lineWidth = character.height;
+}
+
+function rKeyEvent() {
+   /*Determine if it's the player's turn*/
+   if (backgroundImg.gameRef.turn == "character") {
+      /*Roll the dice*/
+      backgroundImg.gameRef.move = genNumRange(1, 6);
+   }
+   console.log("player = "  + backgroundImg.gameRef.turn + " " + backgroundImg.gameRef.move);
 }
 
 /*Return the colour of the character*/
