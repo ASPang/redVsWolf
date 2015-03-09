@@ -326,6 +326,9 @@ function setupGridSpots() {
    /*Card spots*/
    card = [32];
    
+   /*Trap Spots*/
+   trap = [];
+   
    /*Fill grid*/
    fillGrid("right", right);
    fillGrid("up", up);

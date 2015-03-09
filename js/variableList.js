@@ -47,14 +47,12 @@ var projectile = [];
 /*Interface Information*/
 var screenDisplayed = "intro";
 
-
-
-
-
+/*Grid Variables*/
 var gameBoard = []; //Array for the board game
 var blockList = [];  //Array for the blocks
 var blockImg = []; //Stores all the images
 
+/*Block Game Variables*/
 var blockSize = 50; //Blocksize in pixels
 var brdCol = 6; //Number of columns
 var brdRow = 8; //Number of rows 
@@ -66,4 +64,9 @@ var lastKey = 0;
 var tempBlkNum; //Might not need
 var tempBlkPos;
 
+/*Board Game variables*/
 var card = [];   //Display card
+var trap = [];   //Display Trap
+
+/*Turn Base Variables*/
+var characterStop = 1;

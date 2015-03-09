@@ -254,11 +254,12 @@ function fKeyEvent() {
 
 function rKeyEvent() {
    /*Determine if it's the player's turn*/
-   if (backgroundImg.gameRef.turn == "character") {
+   if (backgroundImg.gameRef.turn == "character" ) {// && backgroundImg.gameRef.action == "decision") {
       /*Roll the dice*/
       backgroundImg.gameRef.move = genNumRange(1, 6);
+      backgroundImg.gameRef.action = "rollDie";
    }
-   console.log("player = "  + backgroundImg.gameRef.turn + " " + backgroundImg.gameRef.move);
+   //console.log("player = "  + backgroundImg.gameRef.turn + " " + backgroundImg.gameRef.move);
 }
 
 /*Return the colour of the character*/

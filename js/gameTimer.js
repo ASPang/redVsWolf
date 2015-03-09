@@ -69,14 +69,10 @@ function updateGame() {
     turnBase();
     
     /*Redraw Character path*/
-    // curColour = characterImgColour();
-    // curWidth = characterImgLineWidth(curColour);
-    // redrawPaths(character, pathC, curColour, curWidth);  //Redraw character path
+    
     
     /*Redraw Enemy path*/
-    // curColour = "black";
-    // curWidth = characterImgLineWidth(curColour);
-    // redrawPaths(enemy[0], pathE, curColour, curWidth);  //Redraw enemy path
+    
     
     /*Draw gameplay information*/
     // backgroundImg.canvasCtx.fillStyle = "Black";
@@ -84,38 +80,16 @@ function updateGame() {
     // backgroundImg.canvasCtx.fillText("Elapse Time: " + points, backgroundImg.canvas.width / 2 - 30, 16);
     
     /*Draw the character*/
-    // character.xPos += character.dx;
-    // character.yPos += character.dy;
-
-    // if (character.canvasWallCollision() != "null") {   //Returns the value which the character collides with the wall
-      // character.stopWallCollision();
-      // endGameFlag = true;
-    // }
     character.redraw(character.xPos, character.yPos);
     
     /*Update Enemy position*/
     moveEnemies();
-    // enemyHitLine();
         
     /*Draw any cards*/
-    
-    if (cardUp == 2) {
-      var c = card[0];
-      /*var oriPosX = c.oldPosX;
-      var oriPosY = c.oldPosY;*/
-      
-      c.redraw(c.xPos, c.yPos);
-      //c.redrawRotate();
-      
-      //c.oldPosX = oriPosX;
-      //c.oldPosX = oriPosY;
-      
-      window.setTimeout(function() {
-         card[0].clearAnimateTimer();
-         cardUp += 1;
-      }, 1000);
-    }
+    //if (cardUp != 0) {
+    if (game.action == "showCard" || game.action == "waitDecision") {
       card[0].redraw(card[0].xPos, card[0].yPos);
+    }
     
     /*Check if the image intersects with anything on the canvas*/
     //checkObstacles();
@@ -333,57 +307,118 @@ function turnBase() {
    var game = backgroundImg.gameRef;
    
    /*Determine game action*/
-   if (game.action == "decision") {}
-   
-   /*Determine who's turn it is*/
-   if (game.turn == "character" && game.move == 0) {// && game.preTurn != "character") {  //Player's turn do nothing if the dice hasn't been rolled
-      return game.turn;
+   if (game.action == "waitRoll") {   
+      /*Determine who's turn it is*/
+      if (game.turn == "character" && game.move == 0) {// && game.preTurn != "character") {  //Player's turn do nothing if the dice hasn't been rolled
+         return game.turn;
+      }
+      else if (game.turn == "wolf" && game.move == 0) {  //Opponent's turn - roll the dice for them
+         /*Roll the dice*/
+         backgroundImg.gameRef.move = genNumRange(1, 3);
+         
+         /*Show Roll dice animation*/
+         game.action = "rollDie";
+      }  
    }
-   else if (game.turn == "wolf" && game.move == 0) {  //Opponent's turn - roll the dice for them
-      /*Roll the dice*/
-      backgroundImg.gameRef.move = genNumRange(1, 3);
-   }  
 
    /*Show rolling die animation*/
    if (game.action == "rollDie") {
+      /*Show animation*/
+      var c = card[0];
+      card[0].animateTimer = setInterval("card[0].animateImg();", 10);  
+      
+      c.redraw(c.xPos, c.yPos);
+      
+      /*Stop animation after 1 seconds*/
+      window.setTimeout(function() {
+         card[0].clearAnimateTimer();
+         clearInterval(card[0].animateTimer);  
+         cardUp += 1;
+         game.action = "move";
+         console.log("Done - roll animation");
+      }, 1000);
+      
+      game.action = "rolling";
       return game.turn;
+   }
+   else if (game.action == "rolling") {
+      /*Show animation*/
+      var c = card[0];
+      
+      c.redraw(c.xPos, c.yPos);
    }
    
    /*Update character piece*/
-   if (game.action == "move") {}
-   if (game.turn == "character" && game.move > 0) {
-      moveCurChar(character);
-   }
-   else if (game.turn == "wolf" && game.move > 0) {
-      moveCurChar(enemy[0]);
+   if (game.action == "move") {
+      if (game.turn == "character" && game.move > 0) {
+         moveCurChar(character);
+      }
+      else if (game.turn == "wolf" && game.move > 0) {
+         moveCurChar(enemy[0]);
+      }
    }
    
    /*Reveal card*/
-   if (game.action == "card") {}
-   if (cardUp == 1) {
-      cardUp += 1;
-      card[0].animateTimer = setInterval("card[0].animateImg();", 10);  
+   if (game.action == "showCard") {
+      // if (cardUp == 1) {
+         // cardUp += 1;
+         // card[0].animateTimer = setInterval("card[0].animateImg();", 10);  
+      // }
+      // else if (cardUp == 2) {
+         // var c = card[0];
+         
+         // c.redraw(c.xPos, c.yPos);
+         
+         // window.setTimeout(function() {
+            // card[0].clearAnimateTimer();
+            // cardUp += 1;
+         // }, 1000);
+      // }
+      // else if (cardUp == 3) {
+      // }
+      
+      var c = card[0];
+      c.redraw(c.xPos, c.yPos);
+      
+      /*Start the animation*/      
+      card[0].animateTimer = setInterval("card[0].animateImg();", 10); 
+      
+      /*Stop animation after 1 second*/
+      window.setTimeout(function() {
+            card[0].clearAnimateTimer();
+            
+            /*Show text*/
+            
+            
+         }, 1000);
+         
+      game.action = "waitDecision";
+      console.log("waitDecision");
    }
-   else if (cardUp == 3) {
-   }
+   else if (game.action == "waitDecision") {
+      /*Show animation*/
+      var c = card[0];
+      
+      c.redraw(c.xPos, c.yPos);
+   }   
    
    /*Determine if character is on a special square*/
    if (game.action == "decision") {}
-   if (game.move == 0) {
+   
+   if (game.action == "end" && game.move == 0) {
       backgroundImg.nextPlayerTurn();  //Update whom the next player is going to be
+      game.action = "waitRoll";
    }   
 }
-
-var characterStop = 1;
 
 /*Move current character piece on the board*/
 function moveCurChar(character) {
    var aryPos;
    var cord = [];
    var i;   //Loop counter
-   
+   //console.log("1.roll = " +  characterStop + " " + backgroundImg.gameRef.move);
    /*Determine the character's new area*/
-   if (characterStop == 1 && backgroundImg.gameRef.move > 0) {
+   if (1 == characterStop && backgroundImg.gameRef.move > 0) {
       /*Get the array position*/
       specialSq(character, character.curGridLoc);
       aryPos = character.curGridLoc + character.dx;
@@ -426,25 +461,32 @@ function moveCurChar(character) {
       dy = 0;
    }
    
-   if (characterStop == 0 && character.xPos == cord[0] && character.yPos == cord[1] ) {
+   if (0 == characterStop && character.xPos == cord[0] && character.yPos == cord[1] ) {      
       characterStop = 1;
-      
-      if (backgroundImg.gameRef.move > 0) {
+      if (backgroundImg.gameRef.move > 0) {  //Move character
          backgroundImg.gameRef.move -= 1;
-      }
+         //console.log("roll = " +  backgroundImg.gameRef.move);
+         //console.log("3.roll = " +  characterStop + " " + backgroundImg.gameRef.move);
+         //console.log("mvoed one square");
+      } 
    }
-   else if (characterStop == 0) {   //Move character
+   else if (0 == characterStop) {   //Move character
+      //console.log("2.roll = " +  characterStop + " " + backgroundImg.gameRef.move);
       character.redraw(character.xPos + dx, character.yPos + dy);
    }   
    
    /*Determine if the player's turn has ended*/
-   if (characterStop = 1 && backgroundImg.gameRef.move == 0) {  //Determine if the player has landed on a special square
+   if (characterStop == 1 && backgroundImg.gameRef.move == 0) {  //Determine if the player has landed on a special square
       /*Get the array position*/
       var action = specialSq(character, character.curGridLoc);
          
       if (action == "card") {  //Player has landed on a special square
-         game.action = "card";
+         //backgroundImg.gameRef.action = "card";
+         backgroundImg.gameRef.action = "showCard";
          cardUp = 1;
+      }
+      else {
+         backgroundImg.gameRef.action = "end";
       }
    }
 }
