@@ -85,9 +85,14 @@ function updateGame() {
     /*Update Enemy position*/
     moveEnemies();
         
+    /*Draw the Die*/
+    if (backgroundImg.gameRef.action == "pauseDie") {
+      card[0].redraw(card[0].xPos, card[0].yPos);
+    }
+    
     /*Draw any cards*/
     //if (cardUp != 0) {
-    if (game.action == "showCard" || game.action == "waitDecision") {
+    if (backgroundImg.gameRef.action == "showCard" || backgroundImg.gameRef.action == "waitDecision") {
       card[0].redraw(card[0].xPos, card[0].yPos);
     }
     
@@ -334,7 +339,7 @@ function turnBase() {
          card[0].clearAnimateTimer();
          clearInterval(card[0].animateTimer);  
          cardUp += 1;
-         game.action = "move";
+         game.action = "pauseDie";
          console.log("Done - roll animation");
       }, 1000);
       
@@ -346,6 +351,22 @@ function turnBase() {
       var c = card[0];
       
       c.redraw(c.xPos, c.yPos);
+   }
+   else if (game.action == "pauseDie") {
+      /*Show animation*/
+      var c = card[0];
+      //card[0].animateTimer = setInterval("c.redraw(c.xPos, c.yPos);", 10);  
+      
+      //c.redraw(c.xPos, c.yPos);
+      
+      /*Stop animation after 1 seconds*/
+      window.setTimeout(function() {
+         //card[0].clearAnimateTimer();
+         //clearInterval(card[0].animateTimer);  
+         //cardUp += 1;
+         /*Start moving the game piece*/
+         game.action = "move";
+      }, 1000);
    }
    
    /*Update character piece*/
@@ -388,12 +409,12 @@ function turnBase() {
             card[0].clearAnimateTimer();
             
             /*Show text*/
-            
+            game.action = "waitDecision";
             
          }, 1000);
          
-      game.action = "waitDecision";
-      console.log("waitDecision");
+      game.action = "cardSpinning";
+      console.log("cardSpinning");
    }
    else if (game.action == "waitDecision") {
       /*Show animation*/
@@ -401,6 +422,12 @@ function turnBase() {
       
       c.redraw(c.xPos, c.yPos);
    }   
+   else if (game.action == "waitDecision") {
+      /*Show animation*/
+      var c = card[0];
+      
+      c.redraw(c.xPos, c.yPos);
+   }
    
    /*Determine if character is on a special square*/
    if (game.action == "decision") {}
