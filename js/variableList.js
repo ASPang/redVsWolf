@@ -21,6 +21,7 @@ var gameImage; //Object that'll store all the preloaded images
 var imgSrc = ["background",
  "card1", "card2", "card3", "card4",
  "die1", "die2", "die3", "die4",
+ "trap1", "trap2", "trap3",
  "introMenuBgd", "character", "enemy", "wolf"];   //Name of images
 var backgroundImg;  //background image object
 var character;  //character image object
@@ -69,7 +70,8 @@ var tempBlkPos;
 var card = [];   //Display card
 //var die = [];
 var dice;
-var trap = [];   //Display Trap
+//var trap = [];   //Display Trap
+var trap;
 
 /*Turn Base Variables*/
 var characterStop = 1;

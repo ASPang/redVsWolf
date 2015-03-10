@@ -103,6 +103,9 @@ function setupCanvas() {
     
     /*Draw up the dice images*/
     setupDiceImg(gameCanvas);
+    
+    /*Draw up trap images*/
+     setupTrapImg(gameCanvas);
 }
 
 /*Set up the different interfaces of the game*/
@@ -277,6 +280,36 @@ function setupDiceImg(gameCanvas) {
     }
 }
 
+/*Set up the cards for the board*/
+function setupTrapImg(gameCanvas) {
+   /*Size of image*/
+    var height = 150;
+    var width = 150;
+    var i = 0; //Loop counter
+    
+    /*Add the card to the canvas*/
+    trap = new imageLib(gameCanvas, width, height, 200, 200);
+    trap.oldPosX = 200;
+    trap.oldPosY = 200;
+    
+    /*Save current location on the canvas*/
+    trap.addImg(gameImage.loadedImg["trap1"]);
+   
+    /*Save all frames*/
+    trap.frameNum = 3;
+    trap.frameCount = 1;
+    
+    var w = [0, 150, 150, 150, 150];
+    var h = [0, 150, 150, 150, 150];
+    
+    for (i = 1; i <= trap.frameNum; i++) {
+       trap.frame["trap"+i] = {
+         image: gameImage.loadedImg["trap"+i],
+         width: w[i],
+         height: h[i]
+       };
+    }
+}
 /*Set up the enemy*/
 function addEnemy(gameCanvas) {
     /*Size of plants
@@ -360,7 +393,8 @@ function setupGridSpots() {
    end = [21];
    
    /*Card spots*/
-   card = [34];
+   //card = [34];
+   card = [21];   //TESTING!!! - Disabling
    
    /*Trap Spots*/
    trap = [01, 03, 08, 10, 13, 15, 23, 26, 27, 35];
@@ -374,6 +408,8 @@ function setupGridSpots() {
    fillGrid("end", end);
    
    fillGrid("card", card);
+   
+   fillGrid("trap", trap);
 }
 
 function fillGrid(msg, ary) {
