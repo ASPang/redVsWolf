@@ -94,11 +94,13 @@ function updateGame() {
     //if (cardUp != 0) {
     if (backgroundImg.gameRef.action == "showCard" || backgroundImg.gameRef.action == "waitDecision") {
       card.redraw(card.xPos, card.yPos);
+      
+      /*Show buttons*/
+      backgroundImg.showButton("yesButton");
+      backgroundImg.showButton("noButton");
     }
     
-    /*Show buttons*/
-    backgroundImg.showButton("yesButton");
-    backgroundImg.showButton("noButton");
+    
     
     /*Show traps*/
     if (backgroundImg.gameRef.action == "showTrap" || backgroundImg.gameRef.action == "pauseTrap") {      
@@ -397,13 +399,29 @@ function turnBase() {
             game.action = "waitDecision";
             
          }, 1000);
-         
+      
+      /*If it's the wolf's turn then wait 4 seconds before making a choice*/
+      if (game.turn == "wolf") {
+         /*Stop animation after 1 second*/
+         window.setTimeout(function() {               
+               /*Determine which choice is made*/
+               wolfSelectChoice();
+               
+               /*Show text*/
+               game.action = "end";
+            }, 4000);
+      }
+      
       game.action = "cardSpinning";
       console.log("cardSpinning");
    }
    else if (game.action == "waitDecision") {
       /*Show animation*/      
       card.redraw(card.xPos, card.yPos);
+      
+      /*Show buttons*/
+      backgroundImg.showButton("yesButton");
+      backgroundImg.showButton("noButton");
    }   
    
    /*Reveal Trap*/

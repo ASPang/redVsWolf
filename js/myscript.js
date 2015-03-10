@@ -443,8 +443,7 @@ function setupGridSpots() {
    end = [21];
    
    /*Card spots*/
-   //card = [34];
-   card = [21];   //TESTING!!! - Disabling
+   card = [02, 06, 22, 28, 34, 38];
    
    /*Trap Spots*/
    trap = [01, 03, 08, 10, 13, 15, 23, 26, 27, 36];

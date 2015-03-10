@@ -289,3 +289,11 @@ function enemyAvoidWall(enemy) {
          console.log("HERE at the bottom");
    }
 }        
+
+/***BOARD GAME***/
+/*Card Selection*/
+function wolfSelectChoice() {
+   var choice = genNumRange(0, 1);
+   
+   storyWolf += choice;
+}

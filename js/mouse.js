@@ -31,9 +31,17 @@ function mouseClick(e) {
       screenDisplayed = "gameScreen";
    }
    else if (button == "yesButton" && screenDisplayed == "gameScreen") {
+      if (backgroundImg.gameRef.turn == "character") {
+         storyChar += 1;
+      }
+      backgroundImg.gameRef.action = "end";
       console.log("clicked - yes");
    }
    else if (button == "noButton" && screenDisplayed == "gameScreen") {
+      if (backgroundImg.gameRef.turn == "character") {
+         storyChar += 0;
+      }
+      backgroundImg.gameRef.action = "end";
       console.log("clicked - no");
    }
 }
