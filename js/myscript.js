@@ -100,6 +100,7 @@ function setupCanvas() {
     
     /*Draw up the cards*/
     setupCard(gameCanvas);
+    setupCardChoices();
     
     /*Draw up the dice images*/
     setupDiceImg(gameCanvas);
@@ -198,6 +199,55 @@ function setupCharacter(gameCanvas) {
 
 /*Set up the cards for the board*/
 function setupCard(gameCanvas) {
+   /*Size of image*/
+    var height = 150;
+    var width = 150;
+    var cord = [], x, y, gridPos;
+    var i = 0; //Loop counter
+    
+    /*Add the card to the canvas*/
+    card = new imageLib(gameCanvas, width, height, 150, 200);
+    card.oldPosX = 150;
+    card.oldPosY = 200;
+    
+    /*Save current location on the canvas*/
+    card.addImg(gameImage.loadedImg["card1"]);
+   
+    /*Save all frames*/
+    card.frameNum = 4;
+    card.frameCount = 1;
+    
+    var w = [0, 150, 150, 150, 150];
+    var h = [0, 150, 150, 150, 150];
+    
+    for (i = 1; i <= card.frameNum; i++) {
+       card.frame["card"+i] = {
+         image: gameImage.loadedImg["card"+i],
+         width: w[i],
+         height: h[i]
+       };
+    }
+}
+
+/*Set up the different card choices*/
+function setupCardChoices() {
+   //var centerVer, centerHor;
+
+   /*Set up the intro/menu interface
+   backgroundImg.introBackground(gameImage.loadedImg["introMenuBgd"], 0, 0, 800, 500); //Set up the background
+   backgroundImg.setTitle("Red vs Wolf", 220, 200, "bold 60px Arial" );//Set up the title
+   backgroundImg.setStartButton("Start", 50, 450, "bold 24px Arial" );  //Set up the start button*/
+   
+   /*Set up the Game Over Interface screen
+   backgroundImg.setGameOverMsg("GAME OVER", 125, 160, "bold 60px Arial", "red");
+   backgroundImg.setNewGameButton("New Game", 125, 360,"bold 30px Arial", "black", "blue");*/
+   
+   /*Setup Two choices*/
+   backgroundImg.createNewButton("yesButton", "Yes", 150, 360,"bold 30px Arial", "black", "blue");
+   backgroundImg.createNewButton("noButton", "No", 250, 360,"bold 30px Arial", "black", "blue");
+}
+
+function setupCard2(gameCanvas) {
    /*Size of character*/
     var height = 150;
     var width = 150;
@@ -397,7 +447,7 @@ function setupGridSpots() {
    card = [21];   //TESTING!!! - Disabling
    
    /*Trap Spots*/
-   trap = [01, 03, 08, 10, 13, 15, 23, 26, 27, 35];
+   trap = [01, 03, 08, 10, 13, 15, 23, 26, 27, 36];
    
    /*Fill grid*/
    fillGrid("right", right);

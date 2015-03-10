@@ -485,22 +485,22 @@ imageLib.prototype.animateMove = function(endX, endY, speed) {
 };
 
 /*Animate the image frame*/
-imageLib.prototype.animateImg = function() {
-   var img = this;
+// imageLib.prototype.animateImg = function() {
+   // var img = this;
    
-   img.image = img.frame["card"+img.frameCount].image;
-   img.width = img.frame["card"+img.frameCount].width;
-   img.height = img.frame["card"+img.frameCount].height;
+   // img.image = img.frame["card"+img.frameCount].image;
+   // img.width = img.frame["card"+img.frameCount].width;
+   // img.height = img.frame["card"+img.frameCount].height;
    
-   img.redraw(img.xPos, img.yPos);
+   // img.redraw(img.xPos, img.yPos);
    
-   if (img.frameCount >= img.frameNum) {
-      img.frameCount = 1;
-   }
-   else {
-      img.frameCount += 1;
-   }
-};
+   // if (img.frameCount >= img.frameNum) {
+      // img.frameCount = 1;
+   // }
+   // else {
+      // img.frameCount += 1;
+   // }
+// };
 
 imageLib.prototype.animateImg = function(name) {
    var img = this;

@@ -67,11 +67,14 @@ var tempBlkNum; //Might not need
 var tempBlkPos;
 
 /*Board Game variables*/
-var card = [];   //Display card
+//var card = [];   //Display card
+var card;
 //var die = [];
 var dice;
 //var trap = [];   //Display Trap
 var trap;
+var storyChar = 0;
+var storyWolf = 0;
 
 /*Turn Base Variables*/
 var characterStop = 1;

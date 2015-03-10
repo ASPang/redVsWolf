@@ -93,8 +93,12 @@ function updateGame() {
     /*Draw any cards*/
     //if (cardUp != 0) {
     if (backgroundImg.gameRef.action == "showCard" || backgroundImg.gameRef.action == "waitDecision") {
-      card[0].redraw(card[0].xPos, card[0].yPos);
+      card.redraw(card.xPos, card.yPos);
     }
+    
+    /*Show buttons*/
+    backgroundImg.showButton("yesButton");
+    backgroundImg.showButton("noButton");
     
     /*Show traps*/
     if (backgroundImg.gameRef.action == "showTrap" || backgroundImg.gameRef.action == "pauseTrap") {      
@@ -377,15 +381,17 @@ function turnBase() {
    
    /*Reveal card*/
    if (game.action == "showCard") {      
-      var c = card[0];
-      c.redraw(c.xPos, c.yPos);
+      card.redraw(card.xPos, card.yPos);
       
       /*Start the animation*/      
-      card[0].animateTimer = setInterval("card[0].animateImg();", 10); 
+      card.animateTimer = setInterval("card.animateImg(\"card\");", 10); 
       
       /*Stop animation after 1 second*/
       window.setTimeout(function() {
-            card[0].clearAnimateTimer();
+            /*Stop the card spinning animation*/
+            card.clearAnimateTimer();
+            
+            /*Determine which choice is made*/
             
             /*Show text*/
             game.action = "waitDecision";
@@ -396,10 +402,8 @@ function turnBase() {
       console.log("cardSpinning");
    }
    else if (game.action == "waitDecision") {
-      /*Show animation*/
-      var c = card[0];
-      
-      c.redraw(c.xPos, c.yPos);
+      /*Show animation*/      
+      card.redraw(card.xPos, card.yPos);
    }   
    
    /*Reveal Trap*/
@@ -599,6 +603,7 @@ function moveCurCharBack(character) {
    }
 }
 
+/*Modify game if character lands on a special square*/
 function specialSq(character, aryPos) {
    var grid = backgroundImg.grid
    

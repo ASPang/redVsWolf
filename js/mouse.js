@@ -30,6 +30,12 @@ function mouseClick(e) {
       /*Update the game screen flag*/
       screenDisplayed = "gameScreen";
    }
+   else if (button == "yesButton" && screenDisplayed == "gameScreen") {
+      console.log("clicked - yes");
+   }
+   else if (button == "noButton" && screenDisplayed == "gameScreen") {
+      console.log("clicked - no");
+   }
 }
  
 /*Determine the current location of the mouse*/
@@ -57,13 +63,6 @@ function mouseLoc(e) {
      bWidth = buttonName.width;
      bHeight = buttonName.height;
      
-     /*
-     bX = backgroundImg.button[buttonName].x;
-     bY = backgroundImg.button[buttonName].y;
-     bWidth = backgroundImg.button[buttonName].width;
-     bHeight = backgroundImg.button[buttonName].height;
-     */
-     
      //console.log(x + " " + y + " " + bX + " " + bY);  //TESTING!!!!!!!!!!!
      /*Determine if the button is selected*/
      if(x >= bX  && x <= (bX + bWidth) && y <= bY && y >= (bY-bHeight)){
@@ -77,6 +76,11 @@ function mouseLoc(e) {
          else if (screenDisplayed == "gameOver") {
             //backgroundImg.canvasCtx.fillStyle = "blue";
             backgroundImg.showHoverButton("newGame"); 
+            selected = backgroundImg.buttonName[i];
+         }
+         else if (screenDisplayed == "gameScreen" && backgroundImg.buttonName[i] != "startButton" && backgroundImg.buttonName[i] != "newGame") {
+            //console.log(backgroundImg.buttonName[i]);
+            backgroundImg.showHoverButton(backgroundImg.buttonName[i]); 
             selected = backgroundImg.buttonName[i];
          }
      }

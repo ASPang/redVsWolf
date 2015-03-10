@@ -290,6 +290,38 @@ imageLib.prototype.setTitle = function(text, xPos, yPos, fontSize, fontWeight, f
    return fontStyle;
  };
  
+/*Create New Button*/
+imageLib.prototype.createNewButton = function(buttonName, text, xPos, yPos, style, colour, hover) {
+   //var numButtons = this.button.length;
+   var fontStyle = [], width, height;
+   
+   /*Parse the style string*/
+   fontStyle = this.parseFontStyle(style);
+   
+   /*Determine the width and height of the button*/
+   this.canvasCtx.font = style; //Temporary apply the style on the canvas
+   width = Math.floor(this.canvasCtx.measureText(text).width);
+   height =  fontStyle[1].substring(0,fontStyle[1].length-2); //substring(startPosition,length)
+   
+   /*Save the button properties*/   
+   this.button[buttonName] = {
+      text: text,
+      x: xPos,
+      y: yPos,
+      font: style,
+      fontSize: fontStyle[0],
+      fontWeight: fontStyle[1],
+      fontStyle: fontStyle[2],
+      width: width,
+      height: height,
+      defaultClr: colour,
+      hoverClr: hover
+   };
+   
+   /*Save the button name*/
+   this.buttonName.push(buttonName);
+ };
+ 
  
  
  
