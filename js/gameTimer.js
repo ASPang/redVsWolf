@@ -330,7 +330,7 @@ function turnBase() {
       }
       else if (game.turn == "wolf" && game.move == 0) {  //Opponent's turn - roll the dice for them
          /*Roll the dice*/
-         backgroundImg.gameRef.move = genNumRange(1, 3);
+         backgroundImg.gameRef.move = genNumRange(2, 2);
          
          /*Show Roll dice animation*/
          game.action = "rollDie";
@@ -394,22 +394,26 @@ function turnBase() {
             card.clearAnimateTimer();
             
             /*Determine which choice is made*/
+            genStory();
             
             /*Show text*/
             game.action = "waitDecision";
             
          }, 1000);
       
-      /*If it's the wolf's turn then wait 4 seconds before making a choice*/
+      /*If it's the wolf's turn then wait 3 seconds before making a choice*/
       if (game.turn == "wolf") {
-         /*Stop animation after 1 second*/
+         /*Wolf make a choice after 3 seconds*/
          window.setTimeout(function() {               
                /*Determine which choice is made*/
                wolfSelectChoice();
-               
+            }, 3000);
+            
+         /*Highlight Wolf's choice 2 seconds after selection (5 seconds)*/
+         window.setTimeout(function() {               
                /*Show text*/
                game.action = "end";
-            }, 4000);
+            }, 5000);
       }
       
       game.action = "cardSpinning";
@@ -678,6 +682,42 @@ function specialSqBack(character, aryPos) {
    
    return "none";
 }
+
+/*Story generator*/
+function genStory() {  
+   var story;
+   
+   if (backgroundImg.gameRef.turn == "wolf")  {
+      story = genNumRange(1, 4);
+      card.image = gameImage.loadedImg["card"+story];
+   }
+   else {
+      story = genNumRange(5, 9);
+      card.image = gameImage.loadedImg["card"+story];
+   }
+}
+
+// /*Generate Red Riding Hood's Story*/
+// function genRedStory() {
+   // var story = genNumRange(1, 4);
+   
+   // card.image = gameImage.loadedImg["cardRed"+story];
+// }
+
+// /*Generate Wolf's Story*/
+// function genWolfStory() {
+   // var story = genNumRange(1, 4);
+   
+   // if (story == 1) {
+      
+   // }
+   // else if (story == 2) {
+   // }
+   // else if (story == 3) {
+   // }
+   // else {
+   // }
+// }
 
 
 

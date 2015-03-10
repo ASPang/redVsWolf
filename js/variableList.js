@@ -20,6 +20,7 @@ var ctxBlock;   //Block context
 var gameImage; //Object that'll store all the preloaded images
 var imgSrc = ["background",
  "card1", "card2", "card3", "card4",
+ "card5", "card6", "card7", "card8",
  "die1", "die2", "die3", "die4",
  "trap1", "trap2", "trap3",
  "introMenuBgd", "character", "enemy", "wolf"];   //Name of images
