@@ -443,10 +443,10 @@ function setupGridSpots() {
    end = [21];
    
    /*Card spots*/
-   card = [02, 06, 22, 28, 34, 38];
+   card = [2, 6, 22, 23, 28, 34, 38];
    
    /*Trap Spots*/
-   trap = [01, 03, 08, 10, 13, 15, 23, 26, 27, 36];
+   trap = [1, 3, 8, 10, 13, 15, 26, 27, 36];
    
    /*Fill grid*/
    fillGrid("right", right);

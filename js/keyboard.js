@@ -257,7 +257,7 @@ function rKeyEvent() {
    /*Determine if it's the player's turn*/
    if (backgroundImg.gameRef.turn == "character" && backgroundImg.gameRef.action == "waitRoll") {
       /*Roll the dice*/
-      backgroundImg.gameRef.move = genNumRange(1, 4);
+      backgroundImg.gameRef.move = genNumRange(1, 6);
       backgroundImg.gameRef.action = "rollDie";
    }
    //console.log("player = "  + backgroundImg.gameRef.turn + " " + backgroundImg.gameRef.move);

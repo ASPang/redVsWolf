@@ -18,8 +18,10 @@ var endGameFlag = true; //Game isn't running is true
 var numGamePlay = 0;
 var milSec = 1000;
 
-var cardUp = 0;
+//var cardUp = 0;
 var degrees = 0;
+
+var endingSet = 0;
 
 function menuScreen() {
    backgroundImg.introScreen();
@@ -115,6 +117,8 @@ function updateGame() {
     //console.log("ing game timer " + character.xPos);
     // hitLine(character, enemy[0], pathC, pathCCount, 1);
     
+    
+    
     /*Determine if the game over flag as been set*/
     if (endGameFlag == true) { 
         clearInterval(gameTimer);
@@ -136,10 +140,27 @@ function updateGame() {
         character.dx = 0;
         character.dy = 0;
         
-        /*Set up the option for user to start a new game*/
-        screenDisplayed = "gameOver";
-        backgroundImg.gameOverScreen();
-    }
+        /*Determine the winner and display story ending*/
+        var ending;
+         if (backgroundImg.gameRef.winner[0] == "player") {
+            if (storyChar > 4) {
+               storyChar = 4;
+            }
+            ending = "endChar"+storyChar;
+         }
+         else {
+            if (storyWolf > 4) {
+               storyWolf = 4;
+            }
+            ending = "endWolf"+storyWolf;
+         }
+
+         showEndingStory(ending);
+
+         /*Set up the option for user to start a new game*/
+         screenDisplayed = "gameOver";
+         backgroundImg.gameOverScreen();
+   }
 }
 
 /*Update the enemy position on the screen by pixels*/
@@ -330,7 +351,7 @@ function turnBase() {
       }
       else if (game.turn == "wolf" && game.move == 0) {  //Opponent's turn - roll the dice for them
          /*Roll the dice*/
-         backgroundImg.gameRef.move = genNumRange(2, 2);
+         backgroundImg.gameRef.move = genNumRange(1, 6);
          
          /*Show Roll dice animation*/
          game.action = "rollDie";
@@ -411,6 +432,10 @@ function turnBase() {
             
          /*Highlight Wolf's choice 2 seconds after selection (5 seconds)*/
          window.setTimeout(function() {               
+               /*Revert button colours back to default black*/
+               backgroundImg.button["yesButton"].defaultClr = "black";
+               backgroundImg.button["noButton"].defaultClr = "black";
+               
                /*Show text*/
                game.action = "end";
             }, 5000);
@@ -457,8 +482,6 @@ function turnBase() {
    }   
    
    /*Determine if character is on a special square*/
-   if (game.action == "decision") {}
-   
    if (game.action == "end" && game.move == 0) {
       backgroundImg.nextPlayerTurn();  //Update whom the next player is going to be
       game.action = "waitRoll";
@@ -644,7 +667,8 @@ function specialSq(character, aryPos) {
    }
    else if (grid[aryPos] == "end") {  //Reached the end
       character.dx = 0;
-      backgroundImg.gridRef.winner.push(character);
+      backgroundImg.gameRef.winner.push(character);
+      endGameFlag = true;  //Set the end game flag
    }
    else if (grid[aryPos] == "card") {  //Card
       return "card";
@@ -697,6 +721,16 @@ function genStory() {
    }
 }
 
+function showEndingStory(ending) {
+   /*Size of image*/
+   var height = 50;
+   var width = 50;
+
+   /*Add the character to the canvas*/
+   var endingImg = new physics(gameCanvas, width, height, 100, 100);
+   
+   endingImg.addImg(gameImage.loadedImg[ending]);
+}
 // /*Generate Red Riding Hood's Story*/
 // function genRedStory() {
    // var story = genNumRange(1, 4);
