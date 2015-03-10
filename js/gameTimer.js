@@ -87,13 +87,19 @@ function updateGame() {
         
     /*Draw the Die*/
     if (backgroundImg.gameRef.action == "pauseDie") {
-      card[0].redraw(card[0].xPos, card[0].yPos);
+      dice.redraw(dice.xPos, dice.yPos);
     }
     
     /*Draw any cards*/
     //if (cardUp != 0) {
     if (backgroundImg.gameRef.action == "showCard" || backgroundImg.gameRef.action == "waitDecision") {
       card[0].redraw(card[0].xPos, card[0].yPos);
+    }
+    
+    /*Show traps*/
+    if (backgroundImg.gameRef.action == "showTrap" || backgroundImg.gameRef.action == "pauseTrap") {      
+      var c = card[0];
+      c.redraw(c.xPos, c.yPos);
     }
     
     /*Check if the image intersects with anything on the canvas*/
@@ -329,16 +335,18 @@ function turnBase() {
    /*Show rolling die animation*/
    if (game.action == "rollDie") {
       /*Show animation*/
-      var c = card[0];
-      card[0].animateTimer = setInterval("card[0].animateImg();", 10);  
-      
-      c.redraw(c.xPos, c.yPos);
+      dice.animateTimer = setInterval("dice.animateImg(\"die\");", 10);  
+      dice.redraw(dice.xPos, dice.yPos);
       
       /*Stop animation after 1 seconds*/
       window.setTimeout(function() {
-         card[0].clearAnimateTimer();
-         clearInterval(card[0].animateTimer);  
-         cardUp += 1;
+         /*Stop the dice animation*/
+         dice.clearAnimateTimer();
+         
+         /*Show the dice number rolled*/
+         dice.image = gameImage.loadedImg["die"+game.move]; //"die"+game.move;
+         
+         /*Set the flag for next game step*/
          game.action = "pauseDie";
          console.log("Done - roll animation");
       }, 1000);
@@ -347,23 +355,12 @@ function turnBase() {
       return game.turn;
    }
    else if (game.action == "rolling") {
-      /*Show animation*/
-      var c = card[0];
-      
-      c.redraw(c.xPos, c.yPos);
+      /*Show animation*/      
+      dice.redraw(dice.xPos, dice.yPos);
    }
-   else if (game.action == "pauseDie") {
-      /*Show animation*/
-      var c = card[0];
-      //card[0].animateTimer = setInterval("c.redraw(c.xPos, c.yPos);", 10);  
-      
-      //c.redraw(c.xPos, c.yPos);
-      
+   else if (game.action == "pauseDie") {     
       /*Stop animation after 1 seconds*/
       window.setTimeout(function() {
-         //card[0].clearAnimateTimer();
-         //clearInterval(card[0].animateTimer);  
-         //cardUp += 1;
          /*Start moving the game piece*/
          game.action = "move";
       }, 1000);
@@ -380,24 +377,7 @@ function turnBase() {
    }
    
    /*Reveal card*/
-   if (game.action == "showCard") {
-      // if (cardUp == 1) {
-         // cardUp += 1;
-         // card[0].animateTimer = setInterval("card[0].animateImg();", 10);  
-      // }
-      // else if (cardUp == 2) {
-         // var c = card[0];
-         
-         // c.redraw(c.xPos, c.yPos);
-         
-         // window.setTimeout(function() {
-            // card[0].clearAnimateTimer();
-            // cardUp += 1;
-         // }, 1000);
-      // }
-      // else if (cardUp == 3) {
-      // }
-      
+   if (game.action == "showCard") {      
       var c = card[0];
       c.redraw(c.xPos, c.yPos);
       
@@ -422,12 +402,37 @@ function turnBase() {
       
       c.redraw(c.xPos, c.yPos);
    }   
-   else if (game.action == "waitDecision") {
-      /*Show animation*/
+   
+   /*Reveal Trap*/
+   if (game.action == "showTrap") {      
       var c = card[0];
-      
       c.redraw(c.xPos, c.yPos);
+      
+      /*Show Trap information*/      
+      card[0].animateTimer = setInterval("", 10); 
+      
+      /*Stop animation after 1 second*/
+      window.setTimeout(function() {
+            card[0].clearAnimateTimer();
+            
+            /*Show text*/
+            game.action = "moveBack";
+            
+         }, 1000);
+         
+      game.action = "pauseTrap";
+      console.log("showing trap");
    }
+   else if (game.action == "moveBack") {
+      //moveCurCharBack(character);
+      //moveCurCharBack(enemy);
+      if (game.turn == "character" && game.move > 0) {
+         moveCurCharBack(character);
+      }
+      else if (game.turn == "wolf" && game.move > 0) {
+         moveCurCharBack(enemy[0]);
+      }
+   }   
    
    /*Determine if character is on a special square*/
    if (game.action == "decision") {}
@@ -492,13 +497,9 @@ function moveCurChar(character) {
       characterStop = 1;
       if (backgroundImg.gameRef.move > 0) {  //Move character
          backgroundImg.gameRef.move -= 1;
-         //console.log("roll = " +  backgroundImg.gameRef.move);
-         //console.log("3.roll = " +  characterStop + " " + backgroundImg.gameRef.move);
-         //console.log("mvoed one square");
       } 
    }
    else if (0 == characterStop) {   //Move character
-      //console.log("2.roll = " +  characterStop + " " + backgroundImg.gameRef.move);
       character.redraw(character.xPos + dx, character.yPos + dy);
    }   
    
@@ -508,11 +509,95 @@ function moveCurChar(character) {
       var action = specialSq(character, character.curGridLoc);
          
       if (action == "card") {  //Player has landed on a special square
-         //backgroundImg.gameRef.action = "card";
          backgroundImg.gameRef.action = "showCard";
          cardUp = 1;
       }
-      else {
+      else if (action == "trap") {  //Player has landed on a trap
+         backgroundImg.gameRef.action = "showTrap";
+      }
+      else {   //End player's turn
+         backgroundImg.gameRef.action = "end";
+      }
+   }
+}
+
+/*Move current character back on the board*/
+function moveCurCharBack(character) {
+   var aryPos;
+   var cord = [];
+   var i;   //Loop counter
+
+   /*Determine the character's new area*/
+   if (character.curGridLoc == 32) {
+      backgroundImg.gameRef.move = 0;
+      characterStop = 1;
+   }  
+   else if (1 == characterStop && backgroundImg.gameRef.move > 0) {
+      /*Get the array position*/
+      specialSq(character, character.curGridLoc);
+      aryPos = character.curGridLoc - character.dx;
+      character.curGridLoc = aryPos;
+      
+      cord = backgroundImg.aryPixelPos(character.curGridLoc); //Get the pixel location of the starting position
+      
+      characterStop = 0;
+      
+      console.log("STart to move charater " + " " + backgroundImg.gameRef.move + " " + cord[0] + " " + cord[1] + " " +  aryPos + " " +  character.dx + " " );
+   }  
+   else {
+      cord = backgroundImg.aryPixelPos(character.curGridLoc); //Get the pixel location of the starting position
+   }   
+   
+   /***MOVE the character***/
+   /*Figure out the direction*/   
+   var dx = 1;
+   var dy = 1;
+   
+   if (character.dx == 1) {
+      dx = -1;
+      dy = 0;
+   }
+   else if (character.dx == (-1)) {
+      dx = 1;
+      dy = 0;
+   }
+      
+   else if (character.dx < 1) {
+      dx = 0;
+      dy = 1;
+   }
+   else if (character.dx > 1) {
+      dx = 0;
+      dy = -1;
+   }
+   else {
+      dx = 0;
+      dy = 0;
+   }
+   
+   if (0 == characterStop && character.xPos == cord[0] && character.yPos == cord[1] ) {      
+      characterStop = 1;
+      if (backgroundImg.gameRef.move > 0) {  //Move character
+         backgroundImg.gameRef.move -= 1;
+      } 
+   }
+   else if (0 == characterStop) {   //Move character
+      character.redraw(character.xPos + dx, character.yPos + dy);
+   }   
+   
+   /*Determine if the player's turn has ended*/
+   if (characterStop == 1 && backgroundImg.gameRef.move == 0) {  //Determine if the player has landed on a special square
+      /*Get the array position*/
+      var action = specialSq(character, character.curGridLoc);
+         
+      if (action == "card") {  //Player has landed on a special square
+         backgroundImg.gameRef.action = "showCard";
+         cardUp = 1;
+      }
+      else if (action == "trap") {  //Player has landed on a trap
+         backgroundImg.gameRef.action = "showTrap";
+      }
+      else {   //End player's turn
          backgroundImg.gameRef.action = "end";
       }
    }
@@ -540,6 +625,9 @@ function specialSq(character, aryPos) {
    }
    else if (grid[aryPos] == "card") {  //Card
       return "card";
+   }
+   else if (grid[aryPos] == "trap") {  //Card
+      return "trap";
    }
    
    return "none";

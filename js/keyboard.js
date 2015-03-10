@@ -252,11 +252,12 @@ function fKeyEvent() {
    backgroundImg.lineWidth = character.height;
 }
 
+/*Event when the "r" is pressed*/
 function rKeyEvent() {
    /*Determine if it's the player's turn*/
-   if (backgroundImg.gameRef.turn == "character" ) {// && backgroundImg.gameRef.action == "decision") {
+   if (backgroundImg.gameRef.turn == "character" && backgroundImg.gameRef.action == "waitRoll") {
       /*Roll the dice*/
-      backgroundImg.gameRef.move = genNumRange(1, 6);
+      backgroundImg.gameRef.move = genNumRange(1, 4);
       backgroundImg.gameRef.action = "rollDie";
    }
    //console.log("player = "  + backgroundImg.gameRef.turn + " " + backgroundImg.gameRef.move);

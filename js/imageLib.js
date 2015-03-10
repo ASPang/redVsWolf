@@ -484,20 +484,38 @@ imageLib.prototype.animateMove = function(endX, endY, speed) {
    
 };
 
+/*Animate the image frame*/
 imageLib.prototype.animateImg = function() {
-   var c = this;
+   var img = this;
    
-   c.image = c.frame["card"+c.frameCount].image;
-   c.width = c.frame["card"+c.frameCount].width;
-   c.height = c.frame["card"+c.frameCount].height;
+   img.image = img.frame["card"+img.frameCount].image;
+   img.width = img.frame["card"+img.frameCount].width;
+   img.height = img.frame["card"+img.frameCount].height;
    
-   c.redraw(c.xPos, c.yPos);
+   img.redraw(img.xPos, img.yPos);
    
-   if (c.frameCount >= c.frameNum) {
-      c.frameCount = 1;
+   if (img.frameCount >= img.frameNum) {
+      img.frameCount = 1;
    }
    else {
-      c.frameCount += 1;
+      img.frameCount += 1;
+   }
+};
+
+imageLib.prototype.animateImg = function(name) {
+   var img = this;
+   
+   img.image = img.frame[name+img.frameCount].image;
+   img.width = img.frame[name+img.frameCount].width;
+   img.height = img.frame[name+img.frameCount].height;
+   
+   img.redraw(img.xPos, img.yPos);
+   
+   if (img.frameCount >= img.frameNum) {
+      img.frameCount = 1;
+   }
+   else {
+      img.frameCount += 1;
    }
 };
 

@@ -82,13 +82,14 @@ function setupCanvas() {
     backgroundImg.gameRef.players.push("wolf");
     
     backgroundImg.gameRef.actionList.push("charRoll");
-    backgroundImg.gameRef.actionList.push("charMove");
+    /*backgroundImg.gameRef.actionList.push("charMove");
     backgroundImg.gameRef.actionList.push("wolfRoll");
     backgroundImg.gameRef.actionList.push("wolfMove");
     backgroundImg.gameRef.actionList.push("rollDie");
     backgroundImg.gameRef.actionList.push("cardOpen");
-    backgroundImg.gameRef.actionList.push("cardResp");
+    backgroundImg.gameRef.actionList.push("cardResp");*/
     
+    backgroundImg.gameRef.action = "waitRoll";
     
     /*Draw the character on the screen*/
     setupCharacter(gameCanvas);
@@ -99,6 +100,9 @@ function setupCanvas() {
     
     /*Draw up the cards*/
     setupCard(gameCanvas);
+    
+    /*Draw up the dice images*/
+    setupDiceImg(gameCanvas);
 }
 
 /*Set up the different interfaces of the game*/
@@ -241,6 +245,38 @@ function setupCard(gameCanvas) {
     //console.log(card[0].frame["card4"].height); 
 }
 
+/*Set up the cards for the board*/
+function setupDiceImg(gameCanvas) {
+   /*Size of character*/
+    var height = 150;
+    var width = 150;
+    var cord = [], x, y, gridPos;
+    var i = 0; //Loop counter
+    
+    /*Add the card to the canvas*/
+    dice = new imageLib(gameCanvas, width, height, 200, 200);
+    dice.oldPosX = 200;
+    dice.oldPosY = 200;
+    
+    /*Save current location on the canvas*/
+    dice.addImg(gameImage.loadedImg["die1"]);
+   
+    /*Save all frames*/
+    dice.frameNum = 4;
+    dice.frameCount = 1;
+    
+    var w = [0, 150, 150, 150, 150];
+    var h = [0, 150, 150, 150, 150];
+    
+    for (i = 1; i <= dice.frameNum; i++) {
+       dice.frame["die"+i] = {
+         image: gameImage.loadedImg["die"+i],
+         width: w[i],
+         height: h[i]
+       };
+    }
+}
+
 /*Set up the enemy*/
 function addEnemy(gameCanvas) {
     /*Size of plants
@@ -324,10 +360,10 @@ function setupGridSpots() {
    end = [21];
    
    /*Card spots*/
-   card = [32];
+   card = [34];
    
    /*Trap Spots*/
-   trap = [];
+   trap = [01, 03, 08, 10, 13, 15, 23, 26, 27, 35];
    
    /*Fill grid*/
    fillGrid("right", right);

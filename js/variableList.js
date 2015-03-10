@@ -20,6 +20,7 @@ var ctxBlock;   //Block context
 var gameImage; //Object that'll store all the preloaded images
 var imgSrc = ["background",
  "card1", "card2", "card3", "card4",
+ "die1", "die2", "die3", "die4",
  "introMenuBgd", "character", "enemy", "wolf"];   //Name of images
 var backgroundImg;  //background image object
 var character;  //character image object
@@ -66,6 +67,8 @@ var tempBlkPos;
 
 /*Board Game variables*/
 var card = [];   //Display card
+//var die = [];
+var dice;
 var trap = [];   //Display Trap
 
 /*Turn Base Variables*/
