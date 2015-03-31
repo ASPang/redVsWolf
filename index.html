@@ -20,95 +20,164 @@
          <div id="gameContent">            
             <!-- Game Information Display --> 
             <div class="gameMenuDiv">
-               <!-- Game Title --
-               <h1></h1-->
             </div>
 
             <!-- Canvas -->
             <canvas id="gameCanvas" width="800" height="500">Your browser does not support the HTML5 canvas tag.</canvas>
-            
-            
-            <!-- Start Button --
-            <div id="gameStartDiv">
-               <button id="startButton" onclick="startTimer();" onfocus="this.blur()">Start Game</button>
-            </div-->
-            
          </div>
          
       </div>
       
       <hr>
       
-      <!-- Game Instruction Section --
+      <!-- Game Instruction Section -->
       <div id="infoDiv">
-         <h4>State Wars Instructions</h4-->
+         <h4>Red Vs Wolf Instructions</h4>
 
-         <!-- How To --
+         <!-- How To -->
          <h5>How To Start:</h5>
-         <p>To start the game click the "Start Game" button below the game window.</p-->
+         <p>To start the game click the "Start Game" button in the game window.</p>
          
-         <!-- Controls --
+         <!-- Controls -->
          <h5>Controls</h5>
-          Use the keyboard arrow keys to move around the game window
+          Use the keyboard and mouse for game input.
          <ul>
             <li>
-               Right Arrow Key - Move your character right;
+               R Key - Press the R key to roll the dice;
             </li>
             <li>
-               Left Arrow Key - Move your character Left;
-            </li>
-            <li>
-               Space Bar - Use the space bar to shoot a projectile. 
-               <b>HINT: </b>The projectile can bounce off of the ground 
-               and tree on the left.
-            </li>
-            
-         </ul-->
+               Mouse Click - Use the mouse key to make a selection/choice;
+            </li>            
+         </ul>
         
-         <!-- Game play --
+         <!-- Game play -->
          <h5>Game Play</h5>
          <p>
-            Don't let the seeds hit the ground and yourself. Try to destroy them all!
-         </p-->
+            Arrive at grandmother's house before the wolf beats you to it.
+         </p>
          
-         <!-- Characters and Items --
+         <h5>Additions to game engine</h5>
+      <ul>
+         <li>
+            <b>Alternate Endings</b> - Depending on the decisions made from the events triggered
+               a different ending may be displayed for the winner.
+         </li>
+         <li>
+            <b>Frame by Frame Animation</b> - The images for an object is animated as if it's 
+               shuffling. In the game the animation is displayed for 3 seconds.
+               Example rolling dice, and revealing of the traps and event.
+         </li>
+         <li>
+            <b>Time based animation (Updated)</b> - This is applied to both characters where it moves across
+               the board automatically now vertically as well. Previously the image/character/enemy only 
+               moved horizontally diagonally as seen in the aliens for Candy4Aliens.
+         </li>
+      </ul>
+         
+         <!-- Characters -->
          <h5>Characters</h5>
          <div id="characterDiv">
             <table style="width:100%">
               <tr>
                 <td>
-                  <img src="img/ship.png" height="auto" width="auto" />
+                  <img src="img/character.png" height="150" width="150" />
                 </td>
                 <td>
-                  <img src="img/plant.png" />
-                </td>
-                <td>
-                  <img src="img/projectile.png" />
+                  <img src="img/wolf.png" height="150" width="150"/>
                 </td>
               </tr>
               <tr>
                 <td>
-                  <b>Player</b>
+                  <b>Red (Player)</b>
                   <br>
-                  A spaceship who is attempting to destroy all plant life by 
-                  preventing any new seedlings.
+                  A little girl on her way to grandmother's house with a basket full of food.
                 </td>
                 <td>
-                  <b>Seeds</b>
+                  <b>Wolf</b>
                   <br>
-                  Seek and destroy. Don't let them hit the ground or you.
+                  A starving wolf in the woods.
                   
-                </td>
-                <td>
-                  <b>Projectile</b>
-                  <br>
-                  They can bounce off of walls and the ground. Unfortunately,
-                  you can only shoot sideways.
                 </td>
               </tr>
             </table> 
          </div>
-      </div-->
+         
+         <!-- Traps -->
+         <h5>Traps</h5>
+         <center>
+         <img src="img/trapTile.png" height="100" width="100"/>
+         </center>
+         <p>
+            When landing on a tile with a trap it triggers one of 3 events for that character. 
+         </p>
+         <div id="characterDiv">
+            <table style="width:100%">
+              <tr>
+                <td>
+                  <img src="img/trap1.png" height="150" width="150" />
+                </td>
+                <td>
+                  <img src="img/trap2.png" height="150" width="150"/>
+                </td>
+                <td>
+                  <img src="img/trap3.png" height="150" width="150"/>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <b>Move Back 1</b>
+                  <br>
+                  Character is force to go back 1 square.
+                </td>
+                <td>
+                  <b>Move Back 2</b>
+                  <br>
+                  Character is force to go back 2 square.
+                </td>
+                <td>
+                  <b>Move Back 3</b>
+                  <br>
+                  Character is force to go back 3 square.
+                </td>
+              </tr>
+            </table> 
+         </div>
+         
+         <!-- Events -->
+         <h5>Events</h5>
+         <center>
+         <img src="img/scrollTile.png" height="100" width="100"/>
+         </center>
+         <p>
+            When landing on a tile with a scroll it triggers one of 4 events for that character. 
+            There are 4 different events per character. Decisions made also effect the ending story 
+            outcome.
+         </p>
+         <div id="characterDiv">
+            <table style="width:100%">
+              <tr>
+                <td>
+                  <img src="img/card1.png" height="200" width="150" />
+                </td>
+                <td>
+                  <img src="img/card5.png" height="200" width="150"/>
+                </td>
+              </tr>
+              <tr>                
+                <td>
+                  <b>Red's Event</b>
+                  <br>
+                  Red gets to make the decision of what it wants to do.
+                </td>
+                <td>
+                  <b>Wolf's Event</b>
+                  <br>
+                  The wolf gets to make the decision of what it wants to do.
+                </td>
+              </tr>
+            </table> 
+         </div>
+      </div>
 
       <!-- JavaScript -->
       <script type="text/javascript" src="js/variableList.js"></script>

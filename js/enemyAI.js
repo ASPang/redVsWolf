@@ -296,7 +296,7 @@ function wolfSelectChoice() {
    var choice = genNumRange(0, 1);
    
    storyWolf += choice;
-   
+   console.log("WOLF " + choice);
    /*Update button selection*/
    if (choice == 1) {
       backgroundImg.button["yesButton"].defaultClr = "blue";

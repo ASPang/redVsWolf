@@ -55,8 +55,8 @@ function preloadGameImages() {
 /*Set up the canvas*/
 function setupCanvas() {
     var gameCanvas = "gameCanvas";
-    var height = 50;
-    var width = 50;
+    var height = 500;
+    var width = 800;
     var square = 100;
     
     backgroundImg = new imageLib(gameCanvas, width, height, 0, 0);
@@ -81,14 +81,7 @@ function setupCanvas() {
     backgroundImg.gameRef.players.push("character");
     backgroundImg.gameRef.players.push("wolf");
     
-    backgroundImg.gameRef.actionList.push("charRoll");
-    /*backgroundImg.gameRef.actionList.push("charMove");
-    backgroundImg.gameRef.actionList.push("wolfRoll");
-    backgroundImg.gameRef.actionList.push("wolfMove");
-    backgroundImg.gameRef.actionList.push("rollDie");
-    backgroundImg.gameRef.actionList.push("cardOpen");
-    backgroundImg.gameRef.actionList.push("cardResp");*/
-    
+    backgroundImg.gameRef.actionList.push("charRoll");    
     backgroundImg.gameRef.action = "waitRoll";
     
     /*Draw the character on the screen*/
@@ -118,7 +111,7 @@ function setupInterfaces() {
    /*Set up the intro/menu interface*/
    backgroundImg.introBackground(gameImage.loadedImg["introMenuBgd"], 0, 0, 800, 500); //Set up the background
    backgroundImg.setTitle("Red vs Wolf", 220, 200, "bold 60px Arial" );//Set up the title
-   backgroundImg.setStartButton("Start", 50, 450, "bold 24px Arial" );  //Set up the start button
+   backgroundImg.setStartButton("Start", 350, 350, "bold 24px Arial" );  //Set up the start button
    
    /*Set up the Game Over Interface screen*/
    backgroundImg.setGameOverMsg("GAME OVER", 125, 160, "bold 60px Arial", "red");
@@ -164,49 +157,24 @@ function setupCharacter(gameCanvas) {
     
     /*Save current location on the grid*/
     character.curGridLoc = startGridPoint;
-    
-    //console.log("Character set up coords "  + cord[0] + " " + cord[1]);
-    
-    //character.oldPosX = backgroundImg.canvas.width - width;
-    //character.oldPosY = 210;
     character.addImg(gameImage.loadedImg["character"]);
     
     /*Character Direction*/
     character.dx = 1;
     character.dy = 0;
     
-    /*Set line colour
-    backgroundImg.strokeStyle = "red";
-    backgroundImg.lineWidth = character.height;*/
-        
-    /*Set movement speed*/
-    // move = height + height/2;
-    // lastKey = 37; //Setting the last key to be left - same direction as the current state
-    
-    /*Save enemy initial location*/
-    // pathC[pathCCount] = {
-            // x: character.oldPosX + Math.floor(character.height/2), 
-            // y: character.oldPosY + Math.floor(character.height/2),
-            // oX: character.oldPosX, 
-            // oY: character.oldPosY,
-            // rbg: colour,
-            // width: lineWidth
-    // };
-    
-    // pathCCount++;
-    
 }
 
 /*Set up the cards for the board*/
 function setupCard(gameCanvas) {
    /*Size of image*/
-    var height = 150;
-    var width = 150;
+    var height = 465;
+    var width = 415;
     var cord = [], x, y, gridPos;
     var i = 0; //Loop counter
     
     /*Add the card to the canvas*/
-    card = new imageLib(gameCanvas, width, height, 150, 200);
+    card = new imageLib(gameCanvas, width, height, 200, 10);
     card.oldPosX = 150;
     card.oldPosY = 200;
     
@@ -217,34 +185,31 @@ function setupCard(gameCanvas) {
     card.frameNum = 4;
     card.frameCount = 1;
     
-    var w = [0, 150, 150, 150, 150];
-    var h = [0, 150, 150, 150, 150];
+    //var w = [0, 150, 150, 150, 150];
+    //var h = [0, 150, 150, 150, 150];
     
     for (i = 1; i <= card.frameNum; i++) {
        card.frame["card"+i] = {
          image: gameImage.loadedImg["card"+i],
-         width: w[i],
-         height: h[i]
+         width: width,
+         height: height
        };
     }
+    
+    // for (i = 1; i <= card.frameNum; i++) {
+       // card.frame["card"+i] = {
+         // image: gameImage.loadedImg["card"+i],
+         // width: w[i],
+         // height: h[i]
+       // };
+    // }
 }
 
 /*Set up the different card choices*/
-function setupCardChoices() {
-   //var centerVer, centerHor;
-
-   /*Set up the intro/menu interface
-   backgroundImg.introBackground(gameImage.loadedImg["introMenuBgd"], 0, 0, 800, 500); //Set up the background
-   backgroundImg.setTitle("Red vs Wolf", 220, 200, "bold 60px Arial" );//Set up the title
-   backgroundImg.setStartButton("Start", 50, 450, "bold 24px Arial" );  //Set up the start button*/
-   
-   /*Set up the Game Over Interface screen
-   backgroundImg.setGameOverMsg("GAME OVER", 125, 160, "bold 60px Arial", "red");
-   backgroundImg.setNewGameButton("New Game", 125, 360,"bold 30px Arial", "black", "blue");*/
-   
+function setupCardChoices() {   
    /*Setup Two choices*/
-   backgroundImg.createNewButton("yesButton", "Yes", 150, 360,"bold 30px Arial", "black", "blue");
-   backgroundImg.createNewButton("noButton", "No", 250, 360,"bold 30px Arial", "black", "blue");
+   backgroundImg.createNewButton("yesButton", "Yes", 300, 360,"bold 30px Arial", "black", "blue");
+   backgroundImg.createNewButton("noButton", "No", 400, 360,"bold 30px Arial", "black", "blue");
 }
 
 function setupCard2(gameCanvas) {
@@ -307,7 +272,7 @@ function setupDiceImg(gameCanvas) {
     var i = 0; //Loop counter
     
     /*Add the card to the canvas*/
-    dice = new imageLib(gameCanvas, width, height, 200, 200);
+    dice = new imageLib(gameCanvas, width, height, 325, 125);
     dice.oldPosX = 200;
     dice.oldPosY = 200;
     
@@ -324,8 +289,8 @@ function setupDiceImg(gameCanvas) {
     for (i = 1; i <= dice.frameNum; i++) {
        dice.frame["die"+i] = {
          image: gameImage.loadedImg["die"+i],
-         width: w[i],
-         height: h[i]
+         width: width,
+         height: height
        };
     }
 }
@@ -333,12 +298,12 @@ function setupDiceImg(gameCanvas) {
 /*Set up the cards for the board*/
 function setupTrapImg(gameCanvas) {
    /*Size of image*/
-    var height = 150;
-    var width = 150;
+    var height = 300;
+    var width = 300;
     var i = 0; //Loop counter
     
     /*Add the card to the canvas*/
-    trap = new imageLib(gameCanvas, width, height, 200, 200);
+    trap = new imageLib(gameCanvas, width, height, 225, 100);
     trap.oldPosX = 200;
     trap.oldPosY = 200;
     
@@ -355,8 +320,8 @@ function setupTrapImg(gameCanvas) {
     for (i = 1; i <= trap.frameNum; i++) {
        trap.frame["trap"+i] = {
          image: gameImage.loadedImg["trap"+i],
-         width: w[i],
-         height: h[i]
+         width: width, 
+         height: height
        };
     }
 }

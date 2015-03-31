@@ -25,17 +25,6 @@ var endingSet = 0;
 
 function menuScreen() {
    backgroundImg.introScreen();
-
-   /*var oneSec = 30;
-   
-   
-   clearInterval(gameTimer);   
-   startClock = new Date().getTime();*/
-   
-   /*Refresh the screen*/
-   //setInterval(function(){backgroundImg.introScreen();}, oneSec);    
-   
-   //startTimer();
 }
 
 /*Start the game when the start button is clicked*/
@@ -93,7 +82,6 @@ function updateGame() {
     }
     
     /*Draw any cards*/
-    //if (cardUp != 0) {
     if (backgroundImg.gameRef.action == "showCard" || backgroundImg.gameRef.action == "waitDecision") {
       card.redraw(card.xPos, card.yPos);
       
@@ -109,15 +97,7 @@ function updateGame() {
       trap.redraw(trap.xPos, trap.yPos);
     }
     
-    /*Check if the image intersects with anything on the canvas*/
-    //checkObstacles();
-    //characterHit();
-    //updatePath();
-    //characterHitLine();
-    //console.log("ing game timer " + character.xPos);
-    // hitLine(character, enemy[0], pathC, pathCCount, 1);
-    
-    
+    /*Check if the image intersects with anything on the canvas*/    
     
     /*Determine if the game over flag as been set*/
     if (endGameFlag == true) { 
@@ -146,12 +126,18 @@ function updateGame() {
             if (storyChar > 4) {
                storyChar = 4;
             }
+            else {
+               storyChar = 1;
+            }
             ending = "endChar"+storyChar;
          }
          else {
             if (storyWolf > 4) {
                storyWolf = 4;
             }
+            else {
+               storyWolf = 1;
+            }            
             ending = "endWolf"+storyWolf;
          }
 
@@ -716,42 +702,21 @@ function genStory() {
       card.image = gameImage.loadedImg["card"+story];
    }
    else {
-      story = genNumRange(5, 9);
+      story = genNumRange(5, 8);
       card.image = gameImage.loadedImg["card"+story];
    }
 }
 
 function showEndingStory(ending) {
    /*Size of image*/
-   var height = 50;
-   var width = 50;
+   var height = 500;
+   var width = 300;
 
    /*Add the character to the canvas*/
-   var endingImg = new physics(gameCanvas, width, height, 100, 100);
+   var endingImg = new physics(gameCanvas, width, height, 150, 100);
    
    endingImg.addImg(gameImage.loadedImg[ending]);
 }
-// /*Generate Red Riding Hood's Story*/
-// function genRedStory() {
-   // var story = genNumRange(1, 4);
-   
-   // card.image = gameImage.loadedImg["cardRed"+story];
-// }
-
-// /*Generate Wolf's Story*/
-// function genWolfStory() {
-   // var story = genNumRange(1, 4);
-   
-   // if (story == 1) {
-      
-   // }
-   // else if (story == 2) {
-   // }
-   // else if (story == 3) {
-   // }
-   // else {
-   // }
-// }
 
 
 
